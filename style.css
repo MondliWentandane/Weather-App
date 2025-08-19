@@ -1,0 +1,51 @@
+.container-fluid{
+    background-color: rgb(136, 167, 224);
+    border-radius: 10px;
+    height: 60px;
+    input{
+        background-color: rgb(205, 220, 247);
+        border-color: rgb(33, 98, 219);
+    }
+}
+#mode{
+    background-color: rgb(23, 86, 202);
+    border-style: solid;
+    border-color: rgb(73, 124, 218);
+    border-radius: 10px;
+    width: 100px;
+    height: 30px;
+    text-align: center;
+    color: white;
+    margin-right: 40px;
+}
+#cityNm{
+    margin-top: 1px;
+    font-size: 20px;
+}
+/*==This is for th first box*/
+#leftS{
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    margin-left: 5px;
+
+    #bigBox{
+    background-color: rgb(168, 191, 235);
+    width: 1200px;
+    height: 380px;
+    border-radius: 10px;
+   }
+   #smallCards{
+    background-color: rgb(168, 191, 235);
+    width: 1200px;
+    height: 200px;
+    border-radius: 10px;
+   }
+   #otherDaysCards{
+        background-color: rgb(168, 191, 235);
+    width: 1200px;
+    height: 80px;
+    border-radius: 10px;
+   }
+
+}
