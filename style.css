@@ -22,6 +22,11 @@
     margin-top: 1px;
     font-size: 20px;
 }
+/*Here is for the main section==*/
+main{
+    display: inline-flex;
+    gap: 10px;
+}
 /*==This is for th first box*/
 #leftS{
     display: flex;
@@ -34,18 +39,103 @@
     width: 1200px;
     height: 380px;
     border-radius: 10px;
+    display: inline-flex;
+
+
+    #BigImage{
+        width: 30%;
+    }
+    #BigImage img{
+        width: 100%;
+        
+    }
+    #conditionT{
+        font-size: 25px;
+       #descr{
+        margin-top: 90px;
+       }
+       #temp{
+        font-size: 65px;
+       }
+    }
+    #dateTime{
+       font-size: 25px;
+       
+    }
+    
    }
    #smallCards{
     background-color: rgb(168, 191, 235);
     width: 1200px;
     height: 200px;
     border-radius: 10px;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 5px;
+
+    div{
+        margin-top: 10px;
+        margin-left: 10px;
+        width: 380px;
+        height: 76px;
+        border-radius: 10px;
+        box-shadow: 5px 5px 5px rgb(66, 101, 165);
+        }
+        img{
+            width:70px;
+            height: 70px;
+        }
+
    }
    #otherDaysCards{
         background-color: rgb(168, 191, 235);
     width: 1200px;
     height: 80px;
     border-radius: 10px;
+    display: inline-flex;
+    flex-wrap: wrap;
+    div{
+        margin-left: 15px;
+        width: 380px;
+        height: 76px;
+        border-radius: 10px;
+        box-shadow: 5px 5px 5px rgb(66, 101, 165);
+        }
    }
+
+}
+#rightS{
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+  
+    #suggestionBox{
+        background-color: rgb(168, 191, 235);
+        width: 685px;
+        height: 300px;
+        border-radius: 10px;
+    }
+    #otherCitiesBox{
+        background-color: rgb(168, 191, 235);
+        width: 685px;
+        height: 380px;
+        border-radius: 10px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        div{
+            background-color: rgb(168, 191, 235);
+            width: 90%;
+            height: 25%;
+            margin-top: 18px;
+            margin-left: 18px;
+            border-radius: 10px;
+            box-shadow: 5px 5px 5px rgb(66, 101, 165);
+        }
+    }
+
+
+
 
 }

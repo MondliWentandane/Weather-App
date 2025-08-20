@@ -6,13 +6,14 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <nav class="navbar sticky-top bg-body-tertiary">
+<body style="background-color: rgb(194, 212, 247);">
+    <nav class="navbar sticky-top bg-body-tertiary" >
     <div class="container-fluid">
         <a class="navbar-brand" href="#">CitySky</a>
         <div style="display:flex; gap: 10px;">
-           <span id="cityNm">Polokane</span>
-           <input type="text" style="width: 300px; border-radius: 7px; height: 34px;" placeholder="Search">
+           <span id="cityNm"></span>
+           <input type="text" id="city" style="width: 300px; border-radius: 7px; height: 34px;" placeholder="Search">
+           <button onclick="getWeather()">Get Weather</button>
         </div>        
         <div id="mode">Light</div>
     </div>
@@ -20,28 +21,43 @@
     <main>
         <div id="leftS">
             <div id="bigBox">
-                <div>
-                    <span id="img_Desc_"></span>
-                </div>   
-                <span id="descrW"></span>     
+                <div id="BigImage">
+                    
+                </div> 
+                <div id="conditionT"></div>
+                <div id="dateTime"></div>    
             </div>    
             <div id="smallCards">
-
+                <div id="feelsLike"></div>
+                <div id="description"></div>
+                <div id="maxTemp"></div>
+                <div id="humidity"></div>
+                <div id="seaLevel"></div>
+                <div id="wind"></div>
             </div>
             <div id="otherDaysCards">
-
+                <div id="day2"></div>
+                <div id="day3"></div>
+                <div id="day4"></div>
             </div>     
         </div>
-        <div id="rightS"></div>
+        <div id="rightS">
+            <div id="suggestionBox">
+                <span id="theClothing"></span>
+            </div>
+            <div id="otherCitiesBox">
+                <div id="city1"></div>
+                <div id="city2"></div>
+                <div id="city3"></div>
+            </div>            
+        </div>
     </main>
 
 
 
   <h2>Check Weather</h2>
 
-  <input type="text" id="city" placeholder="Enter city">
-
-  <button onclick="getWeather()">Get Weather</button>
+  
 
   <p id="result"></p>
 
