@@ -67,25 +67,24 @@ function getWeatherByLocation(){
                 //== Now I am working on the  other conditions of the day
 
                 document.getElementById('feelsLike').innerHTML=
-                `<img src="${getImage(data.weather[0].main)}" alt="weather Image">
-                 <strong></strong>`;
+                `<img src="media/moreDet/feels_like.png" alt="weather Image">
+                 <strong>Feels like: ${data.main.feels_like}</strong>`;
                 document.getElementById('description').innerHTML=
-                `<img src="${getImage(data.weather[0].main)}" alt="weather Image">
-                <strong></strong>`;
+                `<img src="media/moreDet/description.png" alt="weather Image">
+                Description: <strong>${data.weather[0].description}</strong>`;
                 document.getElementById('maxTemp').innerHTML=
-                `<img src="${getImage(data.weather[0].main)}" alt="weather Image">
-                <strong></strong>`;
+                `<img src="media/moreDet/max_temp.png" alt="weather Image">
+                Max Temp: <strong>${data.main.temp_max}</strong>`;
                 document.getElementById('humidity').innerHTML=
-                `<img src="${getImage(data.weather[0].main)}" alt="weather Image">
-                <strong></strong>`;
+                `<img src="media/moreDet/humidity.png" alt="weather Image">
+                <strong>${data.main.humidity}</strong>`;
                 document.getElementById('seaLevel').innerHTML=
-                `<img src="${getImage(data.weather[0].main)}" alt="weather Image">
-                <strong></strong>`;
+                `<img src="media/moreDet/sea_level.png" alt="weather Image">
+                Sea Level: <strong>${data.main.sea_level}</strong>`;
                 document.getElementById('wind').innerHTML=
                 `<img src="${getImage(data.weather[0].main)}" alt="weather Image">
-                <strong></strong>`;
-                
-            
+                 Wind: <strong>Speed: ${data.wind.speed}</strong>`;
+
             }else{
                 alert(`Sorry Undefined city name`);
             }
