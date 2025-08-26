@@ -354,20 +354,20 @@ function getCurrentDateTime() {
     return `${day} ${weekday} ${year} <br> ${hours}:${minutes}`;
 }
 
-function setThemeByTime() {
-    const hour = new Date().getHours();
-    const body = document.body;
-    if (hour >= 6 && hour < 18) {
-        body.classList.remove('dark-mode');
-        body.classList.add('light-mode');
-    } else {
-        body.classList.remove('light-mode');
-        body.classList.add('dark-mode');
-    }
-}
+// function setThemeByTime() {
+//     const hour = new Date().getHours();
+//     const body = document.body;
+//     if (hour >= 6 && hour < 18) {
+//         body.classList.remove('dark-mode');
+//         body.classList.add('light-mode');
+//     } else {
+//         body.classList.remove('light-mode');
+//         body.classList.add('dark-mode');
+//     }
+// }
 
-// Call on page load
-setThemeByTime();
+// // Call on page load
+// setThemeByTime();
 
 // Optional: update theme every hour
 setInterval(setThemeByTime, 60 * 60 * 1000);
