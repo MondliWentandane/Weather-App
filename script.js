@@ -1,6 +1,3 @@
-
-
-
 //=== Here I am getting the weather by the users preffered location 
  const apiKey = "473b77d656249c2740cdfd1a021d2e96";
 async function getWeather(){
@@ -16,8 +13,15 @@ async function getWeather(){
              //=== The name of the City
             document.getElementById('cityNm').innerHTML= `${data.name}`;
             //===== Below I am creating elements that will display the data on first Box
-               document.getElementById('BigImage').innerHTML=
-               `<img src="${getImage(data.weather[0].main)}" alt="weather Image">`; 
+            //=== Check if it's night
+            const now = Date.now() / 1000;
+            const isNight = now < data.sys.sunrise || now > data.sys.sunset;
+
+            //===== Main weather image (moon if night, else normal)
+            document.getElementById('BigImage').innerHTML=
+                isNight 
+                ? `<img src="media/night.png" alt="moon Image">` 
+                : `<img src="${getImage(data.weather[0].main)}" alt="weather Image">`; 
                 document.getElementById('conditionT').innerHTML=`
                 
                 <div id="descr"><div id="temp">${data.main.temp}</div>${data.weather[0].main}<br>
@@ -51,6 +55,8 @@ async function getWeather(){
                  `${getSuggestionClothe(data.weather[0].main)}`;
                  //=== Here is for the other cities
                   getWeatherForOther();
+                  getThreeDayForecast(data.coord.lat,data.coord.lon);
+                  
              
         }else{
             alert("Sorry Undefied city name");
@@ -84,8 +90,15 @@ function getWeatherByLocation(){
              //=== The name of the City
             document.getElementById('cityNm').innerHTML= `${data.name}`;
             //===== Below I am creating elements that will display the data on first Box
-               document.getElementById('BigImage').innerHTML=
-               `<img src="${getImage(data.weather[0].main)}" alt="weather Image">`; 
+            //=== Check if it's night
+            const now = Date.now() / 1000;
+            const isNight = now < data.sys.sunrise || now > data.sys.sunset;
+
+            //===== Main weather image (moon if night, else normal)
+            document.getElementById('BigImage').innerHTML=
+                isNight 
+                ? `<img src="media/night.png" alt="moon Image">` 
+                : `<img src="${getImage(data.weather[0].main)}" alt="weather Image">`; 
                 document.getElementById('conditionT').innerHTML=`
                 
                 <div id="descr"><div id="temp">${data.main.temp}</div>${data.weather[0].main}<br>
@@ -118,6 +131,8 @@ function getWeatherByLocation(){
                  document.getElementById('det').innerHTML=
                  `${getSuggestionClothe(data.weather[0].main)}`;
 
+                 getThreeDayForecast(lat,lon);
+
 
             }else{
                 alert(`Sorry Undefined city name`);
@@ -137,9 +152,14 @@ async function getWeatherForOther(){
         const response = await fetch(url);
         const data = await response.json();
         if(response.status === 200){
-            document.getElementById(`city${x}`).innerHTML=
-            `<strong>${data.name}<br>${data.main.temp}</strong>
-            <span><img src="${getImage(data.weather[0].main)}" alt="otherCitySug"> ${descDay(data.weather[0].main)}</span>`;
+                const now = Date.now() / 1000;
+                const isNight = now < data.sys.sunrise || now > data.sys.sunset;
+                const img = isNight ? "media/night.png" : getImage(data.weather[0].main);
+
+                document.getElementById(`city${x}`).innerHTML=
+                    `<strong>${data.name}<br>${data.main.temp}</strong>
+                    <span><img src="${img}" alt="otherCitySug"> ${descDay(data.weather[0].main)}</span>`;
+            
              
         }else{
             alert("Sorry Undefied city name");
@@ -153,6 +173,113 @@ async function getWeatherForOther(){
     }   
 
 }
+//==== Weather for other days  ======
+const apiKey2 = "YOUR_API_KEY_HERE"; // replace with your OpenWeather API key
+
+async function getWeatherForNextDays(city) {
+    const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey2}&units=metric`;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            alert("Sorry, city not found");
+            return;
+        }
+
+        const data = await response.json();
+
+        // Filter forecasts around 12:00 each day
+        let dailyData = data.list.filter(item => item.dt_txt.includes("12:00:00"));
+
+        // Take only next 3 days (skip today)
+        for (let i = 0; i < 3; i++) {
+            const day = dailyData[i];
+            const dayDiv = document.getElementById(`day${i + 2}`);
+            if (dayDiv) {
+                dayDiv.innerHTML = `
+                    <strong>Day ${i + 2}</strong><br>
+                    Temp: ${day.main.temp}°C<br>
+                    Weather: ${day.weather[0].description}
+                `;
+            }
+        }
+
+    } catch (err) {
+        console.log("Error fetching forecast:", err);
+    }
+}
+
+async function getThreeDayForecast(lat, lon) {
+    const apiKey = "2a06182ec57b0915b19dc29187556666";
+    const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+    
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (!data.list) {
+            console.warn("No forecast data available");
+            return;
+        }
+
+        // Group by date (YYYY-MM-DD)
+        const dailyMap = {};
+        data.list.forEach(entry => {
+            const date = new Date(entry.dt * 1000);
+            const dayKey = date.toISOString().split("T")[0];
+            
+            if (!dailyMap[dayKey]) {
+                dailyMap[dayKey] = {
+                    dt: entry.dt,
+                    temps: [],
+                    weatherIcons: []
+                };
+            }
+            dailyMap[dayKey].temps.push(entry.main.temp);
+            dailyMap[dayKey].weatherIcons.push(entry.weather[0].icon);
+        });
+
+        // Convert grouped data into an array
+        const dailyData = Object.values(dailyMap).map(day => ({
+            dt: day.dt,
+            temp: {
+                min: Math.min(...day.temps),
+                max: Math.max(...day.temps)
+            },
+            weather: [
+                { icon: mostCommon(day.weatherIcons) }
+            ]
+        }));
+
+        // Only next 3 days (skip today)
+        const next3Days = dailyData.slice(1, 4);
+
+        // Display in your divs
+        next3Days.forEach((day, index) => {
+            const dayDiv = document.getElementById(`day${index + 2}`);
+            if (dayDiv) {
+                const date = new Date(day.dt * 1000).toDateString();
+                dayDiv.innerHTML = `
+                    <strong>${date}</strong><br>
+                    Min: ${day.temp.min.toFixed(1)}°C<br>
+                    Max: ${day.temp.max.toFixed(1)}°C<br>
+                `;
+            }
+        });
+
+    } catch (err) {
+        console.error("Error fetching forecast:", err);
+    }
+}
+
+// Helper: most common element
+function mostCommon(arr) {
+    return arr.sort((a,b) =>
+        arr.filter(v => v===a).length - arr.filter(v => v===b).length
+    ).pop();
+}
+
+
 
  getWeatherByLocation(); 
  getWeatherForOther();
@@ -226,3 +353,21 @@ function getCurrentDateTime() {
 
     return `${day} ${weekday} ${year} <br> ${hours}:${minutes}`;
 }
+
+function setThemeByTime() {
+    const hour = new Date().getHours();
+    const body = document.body;
+    if (hour >= 6 && hour < 18) {
+        body.classList.remove('dark-mode');
+        body.classList.add('light-mode');
+    } else {
+        body.classList.remove('light-mode');
+        body.classList.add('dark-mode');
+    }
+}
+
+// Call on page load
+setThemeByTime();
+
+// Optional: update theme every hour
+setInterval(setThemeByTime, 60 * 60 * 1000);
