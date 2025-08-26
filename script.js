@@ -13,15 +13,44 @@ async function getWeather(){
         const data = await response.json();
 
         if(response.status === 200){
-            //=== The name of the City
+             //=== The name of the City
             document.getElementById('cityNm').innerHTML= `${data.name}`;
+            //===== Below I am creating elements that will display the data on first Box
                document.getElementById('BigImage').innerHTML=
                `<img src="${getImage(data.weather[0].main)}" alt="weather Image">`; 
                 document.getElementById('conditionT').innerHTML=`
                 
                 <div id="descr"><div id="temp">${data.main.temp}</div>${data.weather[0].main}<br>
-                <strong>${data.weather[0].description}</strong></div><br>`;
+                <strong>${data.weather[0].description}</strong><br>
+                ${descDay(data.weather[0].main)}</div><br>`;
+                //== Here I am displaying date and time
+                document.getElementById('dateTime').innerHTML= getCurrentDateTime();
+                //== Now I am working on the  other conditions of the day
 
+                document.getElementById('feelsLike').innerHTML=
+                `<img src="media/moreDet/feels_like.png" alt="weather Image">
+                 <strong>Feels like: ${data.main.feels_like}</strong>`;
+                document.getElementById('description').innerHTML=
+                `<img src="media/moreDet/description.png" alt="weather Image">
+                Description: <strong>${data.weather[0].description}</strong>`;
+                document.getElementById('maxTemp').innerHTML=
+                `<img src="media/moreDet/max_temp.png" alt="weather Image">
+                Max Temp: <strong>${data.main.temp_max}</strong>`;
+                document.getElementById('humidity').innerHTML=
+                `<img src="media/moreDet/humidity.png" alt="weather Image">
+                <strong>${data.main.humidity}</strong>`;
+                document.getElementById('seaLevel').innerHTML=
+                `<img src="media/moreDet/sea_level.png" alt="weather Image">
+                Sea Level: <strong>${data.main.sea_level}</strong>`;
+                document.getElementById('wind').innerHTML=
+                `<img src="${getImage(data.weather[0].main)}" alt="weather Image">
+                 Wind: <strong>Speed: ${data.wind.speed}</strong>`;
+
+                 //==== Now I am working on the right side displayes ===
+                 document.getElementById('det').innerHTML=
+                 `${getSuggestionClothe(data.weather[0].main)}`;
+                 //=== Here is for the other cities
+                  getWeatherForOther();
              
         }else{
             alert("Sorry Undefied city name");
@@ -82,8 +111,13 @@ function getWeatherByLocation(){
                 `<img src="media/moreDet/sea_level.png" alt="weather Image">
                 Sea Level: <strong>${data.main.sea_level}</strong>`;
                 document.getElementById('wind').innerHTML=
-                `<img src="${getImage(data.weather[0].main)}" alt="weather Image">
+                `<img src="media/moreDet/wind_speed.png" alt="weather Image">
                  Wind: <strong>Speed: ${data.wind.speed}</strong>`;
+
+                 //==== Now I am working on the right side displayes ===
+                 document.getElementById('det').innerHTML=
+                 `${getSuggestionClothe(data.weather[0].main)}`;
+
 
             }else{
                 alert(`Sorry Undefined city name`);
@@ -94,9 +128,34 @@ function getWeatherByLocation(){
 
     })
 }
+//==== Below is the function that displays the weather in other suggested cities ====
+async function getWeatherForOther(){
+    let cities = ["Johannesburg","Bogota","Tokyo"];
+    for (let x = 0; x < cities.length; x++) {
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${cities[x]}&appid=${apiKey}&units=metric`;
+    try{
+        const response = await fetch(url);
+        const data = await response.json();
+        if(response.status === 200){
+            document.getElementById(`city${x}`).innerHTML=
+            `<strong>${data.name}<br>${data.main.temp}</strong>
+            <span><img src="${getImage(data.weather[0].main)}" alt="otherCitySug"> ${descDay(data.weather[0].main)}</span>`;
+             
+        }else{
+            alert("Sorry Undefied city name");
+        }
 
- getWeatherByLocation();
 
+    } catch(err){
+        console.log("Error fetching waaether:", err);
+    }
+        
+    }   
+
+}
+
+ getWeatherByLocation(); 
+ getWeatherForOther();
 
  function getImage(status){
     if(status === 'Clouds'){
@@ -134,6 +193,25 @@ function getWeatherByLocation(){
         return 'hh';
     }
 }
+
+function getSuggestionClothe(status){
+    if(status === 'Clouds'){
+        return `<img src="media/moreCloth/light_jacket.png" alt="suggestionClothe"><br>It's cloudy outside. Wear something light, but keep a jacket handy just in case.`;
+    }else if(status === 'Clear'){
+        return `<img src="media/moreCloth/short.png" alt="suggestionClothe"><br>The sky is clear. Perfect weather for light clothes and maybe sunglasses.`;
+    }else if(status === 'Rain'){
+        return `<img src="media/moreCloth/rain_days.png" alt="suggestionClothe"><br>It's raining. Carry an umbrella or wear a waterproof jacket.`;
+    }else if(status === 'Snow'){
+        return `<img src="media/moreCloth/snow.png" alt="suggestionClothe"><br>Snowy weather! Wear warm layers, a thick coat, gloves, and a hat.`;
+    }else if(status === 'Drizzle'){
+        return `<img src="media/moreCloth/for_Drizzle.png" alt="suggestionClothe"><br>Light drizzle outside. A hoodie or light raincoat should be fine.`;
+    }else if(status === 'Thunderstorm'){
+        return `<img src="media/moreCloth/for_Thunder.png" alt="suggestionClothe"><br>Thunderstorm warning! Best to wear waterproof clothes and avoid staying outside too long.`;
+    }else{
+        return `<img src="media/moreCloth/rain_days.png" alt="suggestionClothe"><br>Weather conditions are unusual. Dress comfortably and be prepared.`;
+    }
+}
+
 function getCurrentDateTime() {
     const now = new Date();
 
