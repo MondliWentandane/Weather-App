@@ -119,7 +119,7 @@ function getWeatherByLocation(){
                 Max Temp: <strong>${data.main.temp_max}</strong>`;
                 document.getElementById('humidity').innerHTML=
                 `<img src="media/moreDet/humidity.png" alt="weather Image">
-                <strong>${data.main.humidity}</strong>`;
+                Humidity: <strong>${data.main.humidity}</strong>`;
                 document.getElementById('seaLevel').innerHTML=
                 `<img src="media/moreDet/sea_level.png" alt="weather Image">
                 Sea Level: <strong>${data.main.sea_level}</strong>`;
